@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -58,6 +59,9 @@ class Post(models.Model):
     def __str__(self):
         dataf = 'Post from {}'.format(self.created_at.strftime('%d.%m.%Y %H:%M'))
         return f"{dataf},{self.author},{self.title}"
+
+    def get_absolute_url(self):
+        return reverse('Start')
 
 
 class PostCategory(models.Model):
