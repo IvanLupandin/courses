@@ -1,15 +1,79 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from .utils import send_email_notification
 from .filters import PostFilter
-from .forms import NewsForm, ArticleForm
-from .models import Post, Category
+from .forms import NewsForm, ArticleForm, PostForm
+from .models import Post, Category, Profile, Subscription
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 """
 get_object_or_404 - используется для получения объекта из базы данных по заданным условиям. 
 Если объект не найден, то функция вызывает исключение `Http404`, и возвращает страницу с ошибкой 404.
 """
+
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+
+            # Отправка уведомления пользователям, подписанным на категорию статьи
+            subscriptions = Subscription.objects.filter(category=post.category)
+            users = [subscription.user for subscription in subscriptions]
+            send_email_notification(users, [post])
+
+            return redirect('home')
+    else:
+        form = PostForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'create_post.html', context)
+
+
+@login_required
+def welcome_email(request):
+    user = request.user
+    subject = 'Добро пожаловать в наше приложение!'
+    html_message = render_to_string('welcome_email.html')
+    plain_message = strip_tags(html_message)
+    send_mail(subject, plain_message, 'noreply@example.com', [user.email], html_message=html_message)
+    return render(request, 'welcome_email_sent.html')
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    fields = ['name', 'email']
+    template_name = 'profile_update.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+
+class PostCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = 'myapp.add_post'
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'post_create.html'
+    success_url = reverse_lazy('home')
+
+
+class PostUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'myapp.change_post'
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'post_update.html'
+    success_url = reverse_lazy('home')
 
 
 # ====== Стартовая страница ============================================================================================
