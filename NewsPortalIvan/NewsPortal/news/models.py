@@ -108,25 +108,3 @@ class Profile(models.Model):
 
 Group.objects.get_or_create(name='common')
 Group.objects.get_or_create(name='authors')
-
-
-@receiver(post_save, sender=User)
-def add_user_to_common_group(sender, instance, created, **kwargs):
-    if created:
-        common_group = Group.objects.get(name='common')
-        instance.groups.add(common_group)
-
-
-@login_required
-def become_author(request):
-    author_group = Group.objects.get(name='authors')
-    request.user.groups.add(author_group)
-    return redirect('home')
-
-
-class Subscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.category.name}"

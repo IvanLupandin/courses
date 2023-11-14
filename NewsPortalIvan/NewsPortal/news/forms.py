@@ -1,20 +1,10 @@
-from django import forms
+from django.forms import ModelForm, BooleanField  # Импортируем true-false поле
 from .models import Post
 
 
-class NewsForm(forms.ModelForm):
+class NewsForm(ModelForm):
+#    check_box = BooleanField(label='Ало, Галочка!')  # добавляем галочку, или же true-false поле
+
     class Meta:
         model = Post
-        fields = ['postCategory', 'title', 'content']
-
-
-class ArticleForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['postCategory', 'title', 'content']
-
-
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['title', 'content', 'category']
+        fields = ['author', 'categoryType', 'category', 'title', 'text']
