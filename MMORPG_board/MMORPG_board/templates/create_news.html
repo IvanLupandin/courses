@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание новости{% endblock %}
+
+{% block content %}
+    <h1>Создание новости</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="news_title">Заголовок новости:</label><br>
+            <input type="text" id="news_title" name="news_title"><br>
+            <label for="news_content">Содержание новости:</label><br>
+            <textarea id="news_content" name="news_content" rows="6" cols="50"></textarea>
+        </div>
+        <br>
+        <button type="submit">Создать новость</button>
+    </form>
+{% endblock %}

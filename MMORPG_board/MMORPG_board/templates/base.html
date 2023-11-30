@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Website Title{% endblock %}</title>
+    <!-- Здесь могут быть ваши общие стили и скрипты -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/advertisements/">Объявления</a></li>
+                <!-- Другие пункты меню -->
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Основное содержимое страницы -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <p>Все права защищены &copy; 2022</p>
+    </footer>
+</body>
+</html>

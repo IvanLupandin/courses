@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание объявления{% endblock %}
+
+{% block content %}
+    <h1>Создание объявления</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="title">Заголовок:</label><br>
+            <input type="text" id="title" name="title"><br>
+            <label for="description">Описание:</label><br>
+            <textarea id="description" name="description" rows="4" cols="50"></textarea><br>
+            <input type="file" id="image" name="image">
+            <input type="text" id="video_url" name="video_url" placeholder="Ссылка на видео">
+            <button type="submit">Создать объявление</button>
+            <label for="category">Категория:</label><br>
+            <select id="category" name="category">
+                <option value="Tanks">Танки</option>
+                <option value="Healers">Хилы</option>
+                <!-- Другие категории -->
+            </select>
+        </div>
+        <br>
+        <button type="submit">Создать объявление</button>
+    </form>
+{% endblock %}

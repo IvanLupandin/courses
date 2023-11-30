@@ -38,15 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 
     'board',
-    'accounts',
-    'bootstrap4',
     'allauth',  # Setting for allauth
     'allauth.account',  # Setting for allauth
     'allauth.socialaccount',  # Setting for allauth
-    'ckeditor',
-    'ckeditor_uploader',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -64,56 +63,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'MMORPG_board.urls'
 
 SITE_ID = 1
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'width': '100%',
-        'height': 600,
-        'toolbar': 'Custom',
-        'extraPlugins': ','.join([
-            'codesnippet',
-            'youtube'
-        ]),
-        'toolbar_Custom': [
-            [
-                'Bold',
-                'Italic',
-                'Underline'
-            ],
-            [
-                'Font',
-                'FontSize',
-                'TextColor',
-                'BGColor'
-            ],
-            [
-                'NumberedList',
-                'BulletedList',
-                '-',
-                'Outdent',
-                'Indent',
-                '-',
-                'JustifyLeft',
-                'JustifyCenter',
-                'JustifyRight',
-                'JustifyBlock'
-            ],
-            [
-                'Link',
-                'Unlink'
-            ],
-            [
-                'RemoveFormat',
-                'Source',
-                'CodeSnippet',
-                'Image',
-                'Youtube'
-            ]
-        ],
-
-    },
-
-}
 
 
 CKEDITOR_UPLOAD_PATH = 'media/'
@@ -194,33 +143,49 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = 'media/'  # Путь где хранятся файлы
-MEDIA_URL = '/media/'  # Ссылка по которой будет обращение от основного хоста
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = 'responses/private'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
-ACCOUNT_SIGNUP_REDIRECT_URL = "/accounts/profile"
 
-EMAIL_HOST_USER = "NewsPortal14@gmail.com"
-EMAIL_HOST_PASSWORD = "NewsAndPortal14"
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_USE_SSL = True
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
+EMAIL_HOST_PASSWORD = 'NewsAndPortal1411' # пароль от почты
+EMAIL_HOST_USER = 'NewsPortal14'
+SERVER_EMAIL = 'NewsPortal14@gmail.com'
+
+ADMINS = [
+    ('Ivan', 'NewsPortal14@gmail.com'),
+    #список всех админов в формате ('имя', 'их почта')
+]
+SERVER_EMAIL = 'NewsPortal14@gmail.com'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+APSCHEDULER_DATETIME_FORMAT = "j N, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'

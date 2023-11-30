@@ -1,36 +1,30 @@
 from django import forms
-from .models import Post, Response
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Advertisement, Response, News
 
 
-class PostForm(forms.ModelForm):
+class UserRegistrationForm(UserCreationForm):
+    email = forms.EmailField()
+
     class Meta:
-        model = Post
-        widgets = {'title': forms.TextInput(attrs={'size': '100'})}
-        fields = ('category', 'title', 'text',)
-
-    def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['category'].label = "Категория:"
-        self.fields['title'].label = "Заголовок"
-        self.fields['text'].label = "Текст объявления:"
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
 
-class RespondForm(forms.ModelForm):
+class AdvertisementForm(forms.ModelForm):
+    class Meta:
+        model = Advertisement
+        fields = ['title', 'text', 'category']
+
+
+class ResponseForm(forms.ModelForm):
     class Meta:
         model = Response
-        fields = ('text',)
-
-    def __init__(self, *args, **kwargs):
-        super(RespondForm, self).__init__(*args, **kwargs)
-        self.fields['text'].label = "Текст отклика:"
+        fields = ['text']
 
 
-class ResponsesFilterForm(forms.Form):
-    def __init__(self, user, *args, **kwargs):
-        super(ResponsesFilterForm, self).__init__(*args, **kwargs)
-        self.fields['title'] = forms.ModelChoiceField(
-            label='Объявление',
-            queryset=Post.objects.filter(author_id=user.id).order_by('-dateCreation').values_list('title', flat=True),
-            empty_label="Все",
-            required=False
-        )
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = News
+        fields = ['title', 'content']

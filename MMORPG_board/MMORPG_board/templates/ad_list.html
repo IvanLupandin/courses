@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Список объявлений{% endblock %}
+
+{% block content %}
+    <h1>Список объявлений</h1>
+
+    {% for ad in advertisements %}
+        <div class="advertisement">
+            <h2>{{ ad.title }}</h2>
+            <p>{{ ad.description }}</p>
+            <p>Категория: {{ ad.category }}</p>
+            <!-- Здесь может быть дополнительная информация о объявлении -->
+            <a href="{% url 'send_response' ad.id %}">Отправить отклик</a>
+        </div>
+    {% endfor %}
+{% endblock %}

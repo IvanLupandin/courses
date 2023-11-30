@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание отклика{% endblock %}
+
+{% block content %}
+    <h1>Создание отклика</h1>
+    <form method="post">
+        {% csrftoken %}
+        <div>
+            <label for="responsetext">Текст отклика:</label><br>
+            <textarea id="responsetext" name="responsetext" rows="4" cols="50"></textarea>
+        </div>
+        <br>
+        <button type="submit">Отправить отклик</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Отправить отклик{% endblock %}
+
+{% block content %}
+    <h1>Отправить отклик</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="response_text">Текст отклика:</label><br>
+            <textarea id="response_text" name="response_text" rows="4" cols="50"></textarea>
+            <input type="file" id="response_image" name="response_image">
+            <input type="text" id="response_video_url" name="response_video_url" placeholder="Ссылка на видео">
+        </div>
+        <br>
+        <button type="submit">Отправить отклик</button>
+    </form>
+{% endblock %}

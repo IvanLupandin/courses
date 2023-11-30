@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import Post
+from .models import News
 
-class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'text', 'author', 'dateCreation']
-    list_filter = ('author', 'dateCreation')
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at')  # определяем, какие поля отображать в списке новостей
+    search_fields = ('title', 'content')  # добавляем возможность поиска по заголовку и содержимому новостей
 
-
-admin.site.register(Post, PostAdmin)
+admin.site.register(News, NewsAdmin)
